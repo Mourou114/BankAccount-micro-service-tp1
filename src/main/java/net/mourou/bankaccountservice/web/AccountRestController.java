@@ -1,20 +1,29 @@
 package net.mourou.bankaccountservice.web;
 
+import net.mourou.bankaccountservice.dto.BankAccountRequestDTO;
+import net.mourou.bankaccountservice.dto.BankAccountResponseDTO;
 import net.mourou.bankaccountservice.entities.BankAccount;
+import net.mourou.bankaccountservice.mappers.AccountMapper;
 import net.mourou.bankaccountservice.repositories.BankAccountRepository;
+import net.mourou.bankaccountservice.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.util.UUID;
 
 
 @RestController
+@RequestMapping("/api")
 public class AccountRestController {
     private BankAccountRepository bankAccountRepository;
+    private AccountService accountService;
+    private AccountMapper accountMapper;
 
 
-    public AccountRestController(BankAccountRepository bankAccountRepository) {
+    public AccountRestController(BankAccountRepository bankAccountRepository, AccountService accountService, AccountMapper accountMapper) {
         this.bankAccountRepository = bankAccountRepository;
+        this.accountService = accountService;
+        this.accountMapper = accountMapper;
     }
 
 
@@ -33,9 +42,8 @@ public class AccountRestController {
 
 
     @PostMapping("/bankAccounts")
-    public BankAccount save (@RequestBody BankAccount bankAccount){
-
-        return bankAccountRepository.save(bankAccount);
+    public BankAccountResponseDTO save (@RequestBody BankAccountRequestDTO requestDTO){
+        return accountService.addAccount(requestDTO);
     }
 
     @DeleteMapping("/bankAccounts/{id}")
@@ -49,7 +57,7 @@ public class AccountRestController {
         if (bankAccountDto.getBalance()!=null) bankAccount.setBalance(bankAccountDto.getBalance());
         if (bankAccountDto.getCreatedAt()!=null) bankAccount.setCreatedAt(bankAccountDto.getCreatedAt());
         if (bankAccountDto.getType()!=null) bankAccount.setType(bankAccountDto.getType());
-        if (bankAccountDto.getCurrency()!=null) bankAccount.setType(bankAccountDto.getType());
+        if (bankAccountDto.getCurrency()!=null) bankAccount.setCurrency(bankAccountDto.getCurrency());
         return bankAccountRepository.save(bankAccount);
     }
 }
