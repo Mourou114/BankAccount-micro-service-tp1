@@ -1,9 +1,6 @@
 package net.mourou.bankaccountservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import net.mourou.bankaccountservice.enums.AccountType;
 
@@ -23,5 +20,7 @@ public class BankAccount {
     private String currency;
     @Enumerated(EnumType.STRING)
     private AccountType type;
+    @ManyToOne
+    private Customer customer;
 
 }

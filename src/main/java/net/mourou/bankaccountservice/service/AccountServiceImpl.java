@@ -3,7 +3,6 @@ package net.mourou.bankaccountservice.service;
 import net.mourou.bankaccountservice.dto.BankAccountRequestDTO;
 import net.mourou.bankaccountservice.dto.BankAccountResponseDTO;
 import net.mourou.bankaccountservice.entities.BankAccount;
-import net.mourou.bankaccountservice.enums.AccountType;
 import net.mourou.bankaccountservice.mappers.AccountMapper;
 import net.mourou.bankaccountservice.repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,20 @@ public class AccountServiceImpl implements AccountService{
                 .currency(saveBankAccount.getCurrency())
                 .build();*/
 
+
+        BankAccountResponseDTO bankAccountResponseDTO =accountMapper.fromBankAccount(saveBankAccount);
+        return bankAccountResponseDTO;
+    }
+    @Override
+    public BankAccountResponseDTO updateAccount(String id, BankAccountRequestDTO bankAccountDTO) {
+        BankAccount bankAccount = BankAccount.builder()
+                .id(id)
+                .createdAt(new Date())
+                .type(bankAccountDTO.getType())
+                .balance(bankAccountDTO.getBalance())
+                .currency(bankAccountDTO.getCurrency())
+                .build();
+        BankAccount saveBankAccount = bankAccountRepository.save(bankAccount);
 
         BankAccountResponseDTO bankAccountResponseDTO =accountMapper.fromBankAccount(saveBankAccount);
         return bankAccountResponseDTO;
